@@ -20,6 +20,7 @@ Each tick follows the following algorithm:
     2. For each node (ascending order)
         - Update the node (the remaining time of each job in the node decreases by 1)
         - Check if you can add any jobs to the node from the backlog (if so add it to the node and remove it from the backlog)
+        - If you can't add the first job you see, break (as ever other job is larger)
 
 The backlog is ordered by size (ascending). This means that the smallest jobs are placed into the smallest available computers first. I believe this is better as the entire queue isn't bottlenecked by one large job waiting for a single node. A lot of smaller jobs get executed while the large job waits. This also provides a minor optimization in that if a node does not have space for the first job it sees in the backlog, there is no need to check the rest of the backlog as the backlog is always sorted.
 
