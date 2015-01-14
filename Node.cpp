@@ -4,7 +4,6 @@
 
 using namespace std;
 
-
 Node::Node(int node_number_, int resource_units_)
     : resource_units(resource_units_), node_number(node_number_),
     resources_free(resource_units_)

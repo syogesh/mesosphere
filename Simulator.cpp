@@ -78,7 +78,7 @@ void process_jobs(vector<shared_ptr<Node> >& nodes, list<shared_ptr<Job> >& jobs
     while ( !jobs.empty() || !job_backlog.empty() ) {
         cout << "\nTick #" << tick++ << endl;
 
-        // get latest job
+        // get latest job and add to backlog at an appropriate spot
         if ( !jobs.empty() ) {
             insert_job_into_backlog(jobs.front(), job_backlog);
             jobs.pop_front();
@@ -90,6 +90,11 @@ void process_jobs(vector<shared_ptr<Node> >& nodes, list<shared_ptr<Job> >& jobs
 
             // add any available jobs to the nodes
             for (auto job_it = job_backlog.begin(); job_it != job_backlog.end(); ) {
+
+                // this could be improved by keeping track of the resources needed by the smallest job
+                if ( node->get_available_resources() == 0 )
+                    break;
+
                 if ( node->get_available_resources()
                         >= (*job_it)->get_resources_needed() ) {
                     node->assign_job(*job_it);
@@ -97,12 +102,9 @@ void process_jobs(vector<shared_ptr<Node> >& nodes, list<shared_ptr<Job> >& jobs
                     job_backlog.erase(job_it++);
                 }
                 else
-                    ++job_it;
+                    break;
             }
         }
-
-        if (tick > 20)
-            break;
     }
 
     int jobs_remaining;
@@ -120,5 +122,12 @@ void process_jobs(vector<shared_ptr<Node> >& nodes, list<shared_ptr<Job> >& jobs
 }
 
 void insert_job_into_backlog(shared_ptr<Job> new_job, list<shared_ptr<Job> >& job_backlog) {
-    job_backlog.push_front(new_job);
+    auto it = job_backlog.begin();
+    while (it != job_backlog.end()) {
+        if ( (*it)->get_resources_needed() > new_job->get_resources_needed() ) {
+            job_backlog.insert(it, new_job);
+            return;
+        }
+    }
+    job_backlog.push_back(new_job);
 }
