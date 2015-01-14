@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include <map>
+#include <algorithm>
 
 #include "Job.h"
 #include "Node.h"
