@@ -9,7 +9,8 @@ There were two ways to interpret the input for this problem: 1. we had knowledge
 
 I also assumed that each new job read would be the beginning of a new tick
 
-### Reading the output
+### Reading the input/output
+The first line of the input is the list of nodes; the second line is the list of jobs where each job is a tick
 I first print all the nodes and jobs as I read them. Then each "tick", I assign the latest job to a node and print the node's remaining resources. When a job is completed, I print that and show the updated amount of resources available for that node.
 
 ### Thought Process and choices
